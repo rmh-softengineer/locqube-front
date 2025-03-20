@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import FacebookLogin, {
   ReactFacebookFailureResponse,
   ReactFacebookLoginInfo,
@@ -9,6 +9,18 @@ import { useHistory } from "react-router-dom";
 const Login: React.FC = () => {
   const authContext = useContext(AuthContext);
   const history = useHistory();
+
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+
+    if (token) {
+      history.push("/properties");
+    } else {
+      setIsLoading(false);
+    }
+  }, [history]);
 
   const handleResponse = async (
     response: ReactFacebookLoginInfo | ReactFacebookFailureResponse
@@ -33,13 +45,17 @@ const Login: React.FC = () => {
         const data = await res.json();
 
         authContext?.login(data.token);
-        
+
         history.push("/properties");
       } catch (error) {
         console.error("Error sending token to backend:", error);
       }
     }
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <FacebookLogin
