@@ -17,7 +17,7 @@ const PropertyList: React.FC = () => {
     data: properties,
   } = useQuery({
     queryKey: ["properties"],
-    queryFn: getProperties,
+    queryFn: () => getProperties(authContext?.token || ""),
   });
 
   const {
