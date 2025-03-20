@@ -25,7 +25,7 @@ const Login: React.FC = () => {
   const handleResponse = async (
     response: ReactFacebookLoginInfo | ReactFacebookFailureResponse
   ) => {
-    if ("status" in response && response.status === "unknown") {
+    if ("status" in response && response.status === "ok") {
       console.log("Facebook Login Failed:", response);
       return;
     }
